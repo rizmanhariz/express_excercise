@@ -1,0 +1,312 @@
+{
+	"info": {
+		"_postman_id": "158d0d42-69a2-434b-b6b6-7cf535a85a85",
+		"name": "express_excercise",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12639507"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Your Name\",\r\n    \"email\":\"{{email}}\",\r\n    \"password\":\"{{password}}\",\r\n    \"isAdmin\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostname_expressTest}}/auth/register",
+							"host": [
+								"{{hostname_expressTest}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Is success\", function() {\r",
+									"    const statusCode = pm.response.code;\r",
+									"    const data = pm.response.json()\r",
+									"    if (statusCode == 200){\r",
+									"        pm.environment.set(\"token\", data.token);\r",
+									"    };\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"{{email}}\",\r\n    \"password\":\"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostname_expressTest}}/auth/login",
+							"host": [
+								"{{hostname_expressTest}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "changePassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"new_password\": \"{{password}}\",\r\n    \"old_password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostname_expressTest}}/auth/changePassword",
+							"host": [
+								"{{hostname_expressTest}}"
+							],
+							"path": [
+								"auth",
+								"changePassword"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{hostname_expressTest}}/user/me",
+							"host": [
+								"{{hostname_expressTest}}"
+							],
+							"path": [
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "me",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"SomeOtherName\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostname_expressTest}}/user/me",
+							"host": [
+								"{{hostname_expressTest}}"
+							],
+							"path": [
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "training",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"How to Paint\",\r\n    \"type\": \"Detailed\",\r\n    \"subjects\": [\"Painting\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{hostname_expressTest}}/training",
+					"host": [
+						"{{hostname_expressTest}}"
+					],
+					"path": [
+						"training"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "training",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{hostname_expressTest}}/training?name=someName&subjects=Math,Painting&streams=Arts,Commerce",
+					"host": [
+						"{{hostname_expressTest}}"
+					],
+					"path": [
+						"training"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "someName"
+						},
+						{
+							"key": "subjects",
+							"value": "Math,Painting"
+						},
+						{
+							"key": "streams",
+							"value": "Arts,Commerce"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "subject",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"kabuto\",\r\n    \"stream\":\"Arts\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{hostname_expressTest}}/subject",
+					"host": [
+						"{{hostname_expressTest}}"
+					],
+					"path": [
+						"subject"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "subject",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{hostname_expressTest}}/subject",
+					"host": [
+						"{{hostname_expressTest}}"
+					],
+					"path": [
+						"subject"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
