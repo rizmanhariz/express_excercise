@@ -12,7 +12,7 @@ exports.login = async(req, res) => {
         });
 
         if (!loginAttempt){
-            res.status(401).send('Invalid email/password');
+            return res.status(401).send('Invalid email/password');
         };
         
         let uid = loginAttempt._id;
