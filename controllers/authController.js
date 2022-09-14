@@ -2,9 +2,9 @@ const {createHmac} = require('crypto');
 const hashSalt = require('../config/constant').init().hashSalt;
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-exports.login = async(req, res) => {
+exports.login = async(req, res, next) => {
     try {
-        console.log('in controller')
+        console.log(anak)
         let hashedPassword = hashPW(req.body.password);
         const loginAttempt = await User.findOne({
             email: req.body.email,
@@ -21,12 +21,15 @@ exports.login = async(req, res) => {
         res.json({token, name: loginAttempt.name});
         
     } catch (err){
+        console.log(err)
         let ret = "internal server error"
         if (err.code == 11000){
             ret = "duplicate value";
+            console.log(err.code);
+            res.status(500).json(ret);
+        } else {
+            next(err)
         };
-        console.log(err.code);
-        res.status(500).json(ret);
     };
 };
 
