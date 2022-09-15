@@ -2,7 +2,32 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var winston = require('winston');
 var logger = require('morgan');
+
+// const winstonLogger = winston.createLogger({
+let winstonConfigs = {
+  level: 'info',
+  format: winston.format.json(),
+  defaultMeta: { service: 'user-service' },
+  transports: [
+    //
+    // - Write all logs with importance level of `error` or less to `error.log`
+    // - Write all logs with importance level of `info` or less to `combined.log`
+    //
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' }),
+  ],
+};
+
+if (process.env.ENV !== 'production'){
+  winstonConfigs.transports.push(
+    new winston.transports.Console()
+  )
+};
+winston.loggers.add('primary',);
+
+var winstonLogger = winston.loggers.get('primary');
 
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/userRouter');
@@ -27,6 +52,11 @@ app.use(dataConsolidate);
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req,res,next){
+  // winstonLogger.info({this:"is an object"})
+  next()
+})
+
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/auth', authRouter);
@@ -40,7 +70,8 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  console.log(err);
+  // console.log(err);
+  winstonLogger.error(JSON.stringify(err))
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

@@ -2,9 +2,10 @@ const {createHmac} = require('crypto');
 const hashSalt = require('../config/constant').init().hashSalt;
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const myLogger = require('winston').loggers.get('primary')
 exports.login = async(req, res, next) => {
     try {
-        console.log(anak)
+        myLogger.info("ooh lalal")
         let hashedPassword = hashPW(req.body.password);
         const loginAttempt = await User.findOne({
             email: req.body.email,
