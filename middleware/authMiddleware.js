@@ -2,8 +2,6 @@ const {verify} = require('jsonwebtoken');
 const hashSalt = require('../config/constant').init().hashSalt;
 const User = require('../models/User');
 exports.authMiddleware = async (req, res, next) => {
-    // jwt.verify(req.header)
-    // console.log(Object.keys(req));
     if (!req.headers.token){
         return res.status(401).send('missing `token` in header');
     };
@@ -22,7 +20,6 @@ exports.authMiddleware = async (req, res, next) => {
 };
 
 exports.adminMiddleware = async (req, res, next) => {
-    console.log(req.user);
     try {
         if (!req.user.isAdmin){
             throw('unauth');

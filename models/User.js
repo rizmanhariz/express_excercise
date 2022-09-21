@@ -12,6 +12,9 @@ const ClientSchema = new mongoose.Schema({
   password: {
     type: String,
   },
+  googleId:{
+    type: String,
+  },
   isAdmin: {
     type: Boolean, 
   },

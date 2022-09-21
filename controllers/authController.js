@@ -22,11 +22,9 @@ exports.login = async(req, res, next) => {
         res.json({token, name: loginAttempt.name});
         
     } catch (err){
-        console.log(err)
         let ret = "internal server error"
         if (err.code == 11000){
             ret = "duplicate value";
-            console.log(err.code);
             res.status(500).json(ret);
         } else {
             next(err)
@@ -55,7 +53,6 @@ exports.register = async(req, res) => {
             status = 400;
             ret = "duplicate email";
         };
-        console.log(err.code);
         res.status(status).json(ret);
     };
     
@@ -74,14 +71,12 @@ exports.updatePW = async(req, res) => {
         await User.updateOne({_id: req.user._id}, {$set: {password: hashedNewPassword}});
         res.send("Success");
     } catch (err){
-        console.log(err)
         let ret = "internal server error"
         let status = 500;
         if (err.code == 11000){
             status = 400;
             ret = "duplicate email";
         };
-        console.log(err.code);
         res.status(status).json(ret);
     };
     

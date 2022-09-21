@@ -2,10 +2,16 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var winston = require('winston');
 var logger = require('morgan');
+var MongoStore = require('connect-mongo');
+const MONGOSTRING = require('./config/constant').init().mongo_connection_string;
 
-// const winstonLogger = winston.createLogger({
+// configure passport - done once per server starting
+var passport = require('passport');
+require('./config/googleOAuth')(passport);
+
 let winstonConfigs = {
   level: 'info',
   format: winston.format.json(),
@@ -23,12 +29,13 @@ let winstonConfigs = {
   ]
 };
 
+// only log when not in production
 if (process.env.ENV !== 'production'){
   winstonConfigs.transports.push(
     new winston.transports.Console()
   )
 };
-winston.loggers.add('primary',);
+winston.loggers.add('primary', winstonConfigs);
 
 var winstonLogger = winston.loggers.get('primary');
 
@@ -48,6 +55,19 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+// sessions
+app.use(
+  session({
+    secret: 'imhungry',
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({mongoUrl: MONGOSTRING})
+  })
+)
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -56,7 +76,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req,res,next){
-  // winstonLogger.info({this:"is an object"})
+  winstonLogger.info({this:"is an object"})
   next()
 })
 
@@ -73,7 +93,6 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  // console.log(err);
   winstonLogger.error(JSON.stringify(err))
   // set locals, only providing error in development
   res.locals.message = err.message;
