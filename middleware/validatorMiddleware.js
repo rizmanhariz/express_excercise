@@ -3,7 +3,6 @@ const {validationResult, check, body} = require('express-validator')
 
 exports.validatorMiddleware = async (req, res, next) => {
     let errors = validationResult(req);
-    // console.log(errors)
     if (!errors.isEmpty()){
         return res.status(400).json({errors: errors.array()});
     };

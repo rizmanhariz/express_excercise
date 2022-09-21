@@ -4,6 +4,7 @@ var {body} = require('express-validator');
 var {login, register, updatePW} = require('../controllers/authController');
 var {checkEmail, checkString, validatorMiddleware} = require('../middleware/validatorMiddleware');
 var {authMiddleware} = require('../middleware/authMiddleware');
+var passport = require('passport');
 
 router.post('/login', [
     checkEmail,
@@ -11,6 +12,18 @@ router.post('/login', [
     validatorMiddleware,
     login,
 ]);
+
+router.get('/google', [
+    passport.authenticate('google', { scope: ['profile'] })
+]);
+
+router.get('/google/redirect', [
+    passport.authenticate('google', { failureRedirect: '/' }),
+    (req, res) => {
+        res.send("YOU DID IT")
+    }
+]);
+
 
 router.post('/register', [
     checkEmail,

@@ -3,7 +3,6 @@ const Subject = require('../models/Subject');
 
 exports.create = async(req, res) => {
     let data = req.body;
-    console.log(data);
     try {
         const insert = await Training.create({
             name: data.name,
@@ -13,12 +12,10 @@ exports.create = async(req, res) => {
         });
         res.json(insert);
     } catch (err){
-        console.log(err)
         let ret = "internal server error"
         if (err.code == 11000){
             ret = "duplicate value";
         };
-        console.log(err.code);
         res.status(400).json(ret);
     };
 };
@@ -51,9 +48,7 @@ exports.list = async(req, res) => {
 
         res.json(getData);
     } catch (err){
-        console.log(err)
         let ret = "internal server error"
-        console.log(err.code);
         res.status(400).json(ret);
     };  
 };

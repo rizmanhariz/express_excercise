@@ -4,10 +4,14 @@
 1. install node. At least v16 
 2. Run `npm install`. 
 3. change/update `mongo_connection_string` in /config/secrets.json
-4. run `npm run start` to start server.
-5. Make requests to server! Feel free to use postman collection & environment in the /postman folder for requests.
+4. set environment variables for the following:
+```
+GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET
+```
+5. run `npm run start` to start server.
+6. Make requests to server! Feel free to use postman collection & environment in the /postman folder for requests.
 *Note - You'll need to register a new user first with auth/register*
-
 
 ## Assumptions
 1. db has no pre-existing tables, and server would auto create collections/indices for `development` only. Other environments should have the collections/indices created upfront
